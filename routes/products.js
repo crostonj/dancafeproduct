@@ -3,6 +3,42 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+
+  var productList = getProducts();
+  res.send(productList);
+});
+
+router.post('/search', function(req, res, next){
+  var name = req.body.name;
+  var productList = getProducts();
+  
+  var results = [];
+  productList.forEach(function(item){
+    if(item.name.toLowerCase().includes(name.toLowerCase())){
+      results.push(item);
+    }
+  });
+  
+  res.send(results);
+});
+
+router.post('/advsearch', function(req, res, next){
+  var searchdata = req.body.searchdata;
+  var productList = getProducts();
+  
+  var results = [];
+  productList.forEach(function(item){
+    if(item.name.toLowerCase().includes(searchdata.name.toLowerCase())){
+      results.push(item);
+    }
+  });
+  
+  res.send(results);
+});
+
+
+function getProducts(){
+
   var productList = [];
   var product1 = {
     "id": "9ba1ea89-7c8d-4b4f-b985-364d458d32e6",
@@ -30,7 +66,6 @@ router.get('/', function(req, res, next) {
   productList.push(product2);
   productList.push(product3);
 
-  res.send(productList);
-});
-
+  return productList;
+}
 module.exports = router;
